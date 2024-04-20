@@ -52,6 +52,9 @@ class MainWindow : public QMainWindow
 
     static const int attrNum=5;
 
+    int editNameRow = 0;
+    int editNameCol = 0;
+
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -87,6 +90,7 @@ private:
     void renewTable();
     QString getTextFileName();
     void initQComboFilter();
+    void setNameInTable(const QString &name);
 };
 
 #endif // MAINWINDOW_H

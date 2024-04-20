@@ -8,12 +8,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     // set table no Editable
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     // debug code
     qDebug() << "hello world";
-    QString defaultFileName = "/Users/aaron/Downloads/ChoiceFile/test.txt";
+    QString defaultFileName = "/Users/aaron/Downloads/ChoiceFile/ChoiceFile/test.txt";
 
     // show text file path to lineEdit
     ui->qWidgetLineEditPath->setText(defaultFileName);
@@ -181,12 +182,14 @@ void MainWindow::display2table()
         if(qVectorMemInfo[i].getShot())
         {
             Person person = qVectorMemInfo[i].getPerson();
-            ui->tableWidget->setItem(i, FIRST_COL, person.name);
-            ui->tableWidget -> setItem(i, SECOND_COL, person.age);
-            ui->tableWidget -> setItem(i, THIRD_COL, person.sex);
-            ui->tableWidget->setCellWidget(i, FOURTH_COL, person.combo);
+
+            ui -> tableWidget -> setItem(i, FIRST_COL, person.name);
+            ui -> tableWidget -> setItem(i, SECOND_COL, person.age);
+            ui -> tableWidget -> setItem(i, THIRD_COL, person.sex);
+            ui -> tableWidget -> setCellWidget(i, FOURTH_COL, person.combo);
             ui->tableWidget->setCellWidget(i, FIFTH_COL, person.btn);
-          QObject::connect(person.combo,SIGNAL(activated(int)), this, SLOT(on_ComboActivedFunc(int)));
+
+            QObject::connect(person.combo,SIGNAL(activated(int)), this, SLOT(on_ComboActivedFunc(int)));
             QObject::connect(person.btn, SIGNAL(clicked()), this, SLOT(showAvator()));
         }
     }
@@ -401,7 +404,22 @@ void MainWindow::on_tableWidget_cellDoubleClicked(int row, int column)
 {
     if(column == FIRST_COL)
     {
+        editNameRow = row;
+        editNameCol = column;
+
         DialogEditName *dialogEditName = new DialogEditName();
+        disconnect(dialogEditName, &DialogEditName::textEntered, this, &MainWindow::setNameInTable);
+
+        connect(dialogEditName, &DialogEditName::textEntered, this, &MainWindow::setNameInTable);
         dialogEditName->exec();
+    }
+}
+
+void MainWindow::setNameInTable(const QString &name)
+{
+    QTableWidgetItem *existingItem = ui->tableWidget->item(editNameRow, editNameCol);
+    if (existingItem)
+    {
+        existingItem->setText(name);
     }
 }

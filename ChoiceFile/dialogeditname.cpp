@@ -1,5 +1,6 @@
 #include "dialogeditname.h"
 #include "ui_dialogeditname.h"
+#include <QDebug>
 
 DialogEditName::DialogEditName(QWidget *parent) :
     QDialog(parent),
@@ -22,5 +23,6 @@ DialogEditName::~DialogEditName()
 
 void DialogEditName::on_buttonBox_accepted()
 {
-
+    QString text = ui->textEdit->toPlainText();
+    emit textEntered(text); // 发射信号，传递文本
 }
